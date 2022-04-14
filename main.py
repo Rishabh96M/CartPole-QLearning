@@ -16,14 +16,16 @@ if __name__ == '__main__':
     # Resetting the environment
     env.reset()
 
-    agent = AgentLearning(env, 0.9, 1.0, 0.9)
-    print(agent)
-
     # Dummy code to check if environment is working
     for d in range(100):
         env.render()
-        env.step(env.action_space.sample())  # take a random action
+        # take a random action
+        env.step(env.action_space.sample())
     env.close()
+
+    # Initialising AgentLearning
+    agent = AgentLearning(env, 0.9, 1.0, 0.9)
+    print(agent)
 
     '''
     Yet to implement Q Learning Policy
