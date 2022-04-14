@@ -6,13 +6,26 @@
 #              CartPole-V1 environment.
 
 import gym
-import numpy as np
-import random
-import math
+from AgentLearning import AgentLearning
 
-env = gym.make('CartPole-v1')
-env.reset()
 
-for d in range(100):
-    env.render()
-    env.step(env.action_space.sample())
+if __name__ == '__main__':
+    # Initialising openAI gym environment of CartPole-v1
+    env = gym.make('CartPole-v1')
+
+    # Resetting the environment
+    env.reset()
+
+    agent = AgentLearning(env, 0.9, 1.0, 0.9)
+    print(agent)
+
+    # Dummy code to check if environment is working
+    for d in range(100):
+        env.render()
+        env.step(env.action_space.sample())  # take a random action
+    env.close()
+
+    '''
+    Yet to implement Q Learning Policy
+    All support methods are implemented in Agent Learning
+    '''
