@@ -5,7 +5,6 @@
 # Description: Agent Learning Class definition
 
 import random
-import pandas as pd
 import numpy as np
 
 
@@ -16,7 +15,7 @@ class AgentLearning(object):
     Agent that can learn via Q-learning
     """
 
-    def __init__(self, env, alpha=0.1, eps=1.0, gamma=0.9):
+    def __init__(self, env, alpha, eps, gamma):
         self.env = env
         self.alpha = alpha
         self.eps = eps
@@ -24,6 +23,11 @@ class AgentLearning(object):
         self.Q_table = dict()
         self.training_trials = 0
         self.testing_trials = 0
+
+        self.cart_position_bins = np.linspace(-2.4, 2.4, 11)[1:-1]
+        self.pole_angle_bins = np.linspace(-2, 2, 11)[1:-1]
+        self.cart_velocity_bins = np.linspace(-1, 1, 11)[1:-1]
+        self.angle_rate_bins = np.linspace(-3.5, 3.5, 11)[1:-1]
 
     def build_state(self, features):
         """
@@ -48,18 +52,14 @@ class AgentLearning(object):
         ---
         state: State tuple
         """
-        cart_position_bins = pd.cut(
-            [-2.4, 2.4], bins=10, retbins=True)[1][1:-1]
-        pole_angle_bins = pd.cut([-2, 2], bins=10, retbins=True)[1][1:-1]
-        cart_velocity_bins = pd.cut([-1, 1], bins=10, retbins=True)[1][1:-1]
-        angle_rate_bins = pd.cut([-3.5, 3.5], bins=10, retbins=True)[1][1:-1]
         state = self.build_state([np.digitize(x=[obs[0]],
-                                              bins=cart_position_bins)[0],
+                                              bins=self.cart_position_bins),
                                   np.digitize(x=[obs[1]],
-                                              bins=pole_angle_bins)[0],
+                                              bins=self.pole_angle_bins),
                                   np.digitize(x=[obs[2]],
-                                              bins=cart_velocity_bins)[0],
-                                  np.digitize(x=[obs[3]], bins=angle_rate_bins)[0]])
+                                              bins=self.cart_velocity_bins),
+                                  np.digitize(x=[obs[3]],
+                                  bins=self.angle_rate_bins)])
         return state
 
     def choose_action(self, state):
